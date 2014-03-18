@@ -14,6 +14,7 @@ public class CSVParseDemo : MonoBehaviour
 				print ("pasrsing csv file: " + CSV_FILE);
 				TextAsset asset = Resources.Load (CSV_FILE, typeof(TextAsset)) as TextAsset;
 				string str = StringUtil.ConvertANSIToUTF8 (asset.bytes);
+                print(str);
 		}
 	
 		// Update is called once per frame
