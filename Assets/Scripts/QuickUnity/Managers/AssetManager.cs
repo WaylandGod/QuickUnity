@@ -17,8 +17,32 @@ public class AssetManager : MonoBehaviour
         return instance;
     }
 
+    public delegate void EventHandler(Asset asset);
+
+    public event EventHandler OnProgress;
+
+    public event EventHandler OnComplete;
+
     private void Awake()
     {
         instance = this;
+    }
+}
+
+public class Asset
+{
+    private float mProgress = 0.0f;
+
+    public float progess
+    {
+        get
+        {
+            return mProgress;
+        }
+    }
+
+    public Asset(float progress = 0.0f)
+    {
+        mProgress = progress;
     }
 }
