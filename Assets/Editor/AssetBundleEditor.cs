@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class AssetBundleEditor : Editor
 {
-    private const string ASSET_BUNDLE_FILE_EXT = ".unity3d";
+    private const string ASSET_BUNDLE_FILE_EXT = ".assetbundle";
 
     [MenuItem("QuickUnity/AssetBundle/Create AssetBundles (Windows)")]
     public static void CreateAssetBundlesForWin()
