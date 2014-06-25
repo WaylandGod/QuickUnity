@@ -1,0 +1,23 @@
+﻿using QuickUnity.Config;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// Class ConfigDataTemplate.
+/// </summary>
+public class ConfigDataTemplate : ConfigData
+{
+	$fields$
+
+    /// <summary>
+    /// Parse the data from config file.
+    /// </summary>
+    /// <param name="kvps">A dictionary to hold key value pair of config data.</param>
+    public override void ParseData(Dictionary<string, string> kvps)
+    {
+        base.ParseData(kvps);
+		
+		$methods$
+    }
+}

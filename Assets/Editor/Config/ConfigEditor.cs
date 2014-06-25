@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Functions about config files.
+/// Class ConfigEditor to edit config files.
 /// </summary>
 public class ConfigEditor : Editor
 {

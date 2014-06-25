@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Functions about AssetBundle.
+/// Class AssetBundleEditor to edit AssetBundle files.
 /// </summary>
 public class AssetBundleEditor : Editor
 {
