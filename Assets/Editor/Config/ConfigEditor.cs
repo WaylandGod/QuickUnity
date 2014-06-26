@@ -1,6 +1,8 @@
 ﻿using QuickUnityEditor;
 using System.Collections;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 
@@ -168,7 +170,9 @@ namespace QuickUnityEditor.Config
                 string type = types[i];
                 bool end = (i == length - 1);
                 string fieldStr = GetConfigDataField(comment, name, type, end);
+                string methodStr = GetConfigDataMethods(name, type);
                 fieldsStr += fieldStr;
+                methodsStr += methodStr;
             }
 
             tplText = tplText.Replace("$fields$", fieldsStr);
@@ -182,18 +186,31 @@ namespace QuickUnityEditor.Config
         /// <param name="comment">The comment of field.</param>
         /// <param name="name">The name of field.</param>
         /// <param name="type">The type of field.</param>
+        /// <param name="end">if set to <c>true</c> no need to make new line, else have to add line break.</param>
         /// <returns>System.String.</returns>
         private static string GetConfigDataField(string comment, string name, string type, bool end = false)
         {
             string fieldStr = "\t/// <summary>\r\n\t/// " + comment + "\r\n\t/// </summary>\r\n\t";
             fieldStr += "public " + type.Trim() + " " + name.Trim("\n"[0]) + ";";
 
-            if (end)
-                fieldStr += "\r\n";
-            else
+            if (!end)
                 fieldStr += "\r\n\r\n";
 
             return fieldStr;
+        }
+
+        /// <summary>
+        /// Gets the methods of reading configuration data.
+        /// </summary>
+        /// <param name="name">The name of field.</param>
+        /// <param name="type">The type of field.</param>
+        /// <returns>System.String.</returns>
+        private static string GetConfigDataMethods(string name, string type)
+        {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+            string methodStr = "\r\n\t\t" + name.Trim() + " = Read" + textInfo.ToTitleCase(type).Trim() + "(\"" + name.Trim() + "\");";
+            return methodStr;
         }
     }
 }

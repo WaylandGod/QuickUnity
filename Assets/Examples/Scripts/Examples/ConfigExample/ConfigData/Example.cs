@@ -47,20 +47,22 @@ public class ConfigDataTemplate : ConfigData
 	/// int值测试
 	/// </summary>
 	public int intTest;
-
-	/// <summary>
-	/// sbyte测试
-	/// </summary>
-	public sbyte sbyteTest;
-
+	
     /// <summary>
-    /// Parse the data from config file.
+    /// Parse the data from configuration file.
     /// </summary>
-    /// <param name="kvps">A dictionary to hold key value pair of config data.</param>
+    /// <param name="kvps">A dictionary to hold key value pair of configuration data.</param>
     public override void ParseData(Dictionary<string, string> kvps)
     {
-        base.ParseData(kvps);
-		
+        base.ParseData(kvps);	
 
+		id = ReadLong("id");
+		name = ReadString("name");
+		level = ReadShort("level");
+		boolTest = ReadBool("boolTest");
+		byteTest = ReadByte("byteTest");
+		doubleTest = ReadDouble("doubleTest");
+		floatTest = ReadFloat("floatTest");
+		intTest = ReadInt("intTest");
     }
 }
