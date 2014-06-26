@@ -8,8 +8,7 @@ using UnityEngine;
 /// </summary>
 public class ConfigDataTemplate : ConfigData
 {
-	$fields$
-
+$fields$
     /// <summary>
     /// Parse the data from config file.
     /// </summary>
@@ -18,6 +17,6 @@ public class ConfigDataTemplate : ConfigData
     {
         base.ParseData(kvps);
 		
-		$methods$
+$methods$
     }
 }

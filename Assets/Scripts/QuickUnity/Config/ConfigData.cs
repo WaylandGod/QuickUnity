@@ -117,6 +117,20 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
+        /// Reads the sbyte value.
+        /// </summary>
+        /// <param name="key">The key of key value pair.</param>
+        /// <returns>System.SByte.</returns>
+        protected sbyte ReadSByte(string key)
+        {
+            if (!kvps.ContainsKey(key))
+                Debug.LogError(key + ERROR_KEY_NOT_FOUND);
+
+            string value = kvps[key];
+            return sbyte.Parse(value);
+        }
+
+        /// <summary>
         /// Reads the short value.
         /// </summary>
         /// <param name="key">The key of key value pair.</param>

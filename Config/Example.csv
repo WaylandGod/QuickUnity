@@ -1,4 +1,5 @@
-id,name,level
-int,string,int
-1,test1,1
-2,test2,2
+ID,名称,等级,bool值测试,byte值测试,double值测试,float值测试,int值测试,sbyte测试
+id,name,level,boolTest,byteTest,doubleTest,floatTest,intTest,sbyteTest
+long,string,short,bool,byte,double,float,int,sbyte
+1,test1,1,TRUE,0,-9999.9,-8888.8,-99,-128
+2,test2,2,FALSE,255,999999.9,88888.8,99,127
