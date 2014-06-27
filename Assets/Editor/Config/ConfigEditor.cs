@@ -19,16 +19,6 @@ namespace QuickUnityEditor.Config
         private const string WARNING_NO_CONFIG_FILE = "No config data files can be found !";
 
         /// <summary>
-        /// The warning message about no ConfigData template file.
-        /// </summary>
-        private const string WARNING_NO_TEMPLATE_FILE = "No template file for ConfigData !";
-
-        /// <summary>
-        /// The warning message about no folder to save ConfigData files.
-        /// </summary>
-        private const string WARNING_NO_FOLDER_TO_SAVE_CONFIG_DATA = "No folder to save ConfigData files !";
-
-        /// <summary>
         /// The warning message about no config content can be found in file.
         /// </summary>
         private const string WARNING_NO_CONFIG_CONTENT = "No config content can be found in file !";
@@ -54,10 +44,10 @@ namespace QuickUnityEditor.Config
         [MenuItem("QuickUnity/Config/Generate ConfigData Files")]
         public static void GenerateConfigData()
         {
-            string path = EditorUtility.OpenFolderPanel("Load csv config file of Directory", "", "");
+            string path = EditorUtility.OpenFolderPanel("Load csv config file of Directory", "Assets", "");
 
             // If path got nothing, do nothing.
-            if (string.IsNullOrEmpty(path))
+            if (!QuickUnityEditorUtility.CheckAssetFilePath(path))
                 return;
 
             string relativePath = QuickUnityEditorUtility.ConvertToRelativePath(path);
@@ -91,11 +81,8 @@ namespace QuickUnityEditor.Config
             // Get template file content.
             string tplPath = EditorUtility.OpenFilePanel("Load ConfigData template file", "", "txt");
 
-            if (string.IsNullOrEmpty(tplPath))
-            {
-                Debug.LogWarning(WARNING_NO_TEMPLATE_FILE);
+            if (!QuickUnityEditorUtility.CheckAssetFilePath(tplPath))
                 return;
-            }
 
             string tplRelativePath = QuickUnityEditorUtility.ConvertToRelativePath(tplPath);
             TextAsset tplAsset = AssetDatabase.LoadMainAssetAtPath(tplRelativePath) as TextAsset;
@@ -103,11 +90,8 @@ namespace QuickUnityEditor.Config
             // Where you wanna save your ConfigData files.
             string configPath = EditorUtility.SaveFolderPanel("Save ConfigData files in the folder ...", "", "");
 
-            if (string.IsNullOrEmpty(configPath))
-            {
-                Debug.LogWarning(WARNING_NO_FOLDER_TO_SAVE_CONFIG_DATA);
+            if (!QuickUnityEditorUtility.CheckAssetFilePath(configPath))
                 return;
-            }
 
             // Save ConfigData files.
             foreach (TextAsset textAsset in assets)
@@ -116,6 +100,7 @@ namespace QuickUnityEditor.Config
                 string fileName = Path.GetFileNameWithoutExtension(assetPath);
                 string savePath = configPath + Path.AltDirectorySeparatorChar + fileName + CONFIG_DATA_FILE_EXTENSIONS;
                 string configDataContent = GetConfigDataContent(tplAsset.text, textAsset.text);
+                configDataContent = configDataContent.Replace("$className$", fileName);
                 StreamWriter writer = new StreamWriter(savePath, false);
                 writer.Write(configDataContent);
                 writer.Flush();
@@ -136,7 +121,7 @@ namespace QuickUnityEditor.Config
         /// <returns>System.String.</returns>
         private static string GetConfigDataContent(string tplText, string configText)
         {
-            string[] configLines = configText.Split("\r"[0]);
+            string[] configLines = configText.Split("\r\n"[0]);
 
             // Wrong format.
             if (configLines.Length < 3)

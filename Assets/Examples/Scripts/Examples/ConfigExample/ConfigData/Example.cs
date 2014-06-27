@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Class ConfigDataTemplate.
+/// ConfigData of Example.
 /// </summary>
-public class ConfigDataTemplate : ConfigData
+public class Example : ConfigData
 {
 	/// <summary>
 	/// ID
