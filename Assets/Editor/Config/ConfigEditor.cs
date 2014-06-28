@@ -39,9 +39,9 @@ namespace QuickUnityEditor.Config
         private const string CONFIG_DATA_FILE_EXTENSIONS = ".cs";
 
         /// <summary>
-        /// Generate ConfigData files.
+        /// Generate Configuration ValueObject files.
         /// </summary>
-        [MenuItem("QuickUnity/Config/Generate ConfigData Files")]
+        [MenuItem("QuickUnity/Config/Generate Configuration ValueObject files")]
         public static void GenerateConfigData()
         {
             string path = EditorUtility.OpenFolderPanel("Load csv config file of Directory", "Assets", "");
