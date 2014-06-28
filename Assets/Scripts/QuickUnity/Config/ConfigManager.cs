@@ -1,8 +1,8 @@
-﻿using System;
+﻿using QuickUnity.Utilitys;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 
 namespace QuickUnity.Config
@@ -44,10 +44,16 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
+        /// The configuration data table.
+        /// </summary>
+        private Dictionary<Type, Dictionary<int, ConfigData>> configDataDict;
+
+        /// <summary>
         /// Prevents a default instance of the <see cref="ConfigManager"/> class from being created.
         /// </summary>
         private ConfigManager()
         {
+            configDataDict = new Dictionary<Type, Dictionary<int, ConfigData>>();
         }
 
         /// <summary>
@@ -60,11 +66,68 @@ namespace QuickUnity.Config
 
             foreach (TextAsset asset in assets)
             {
-                //string className = Path.GetFileNameWithoutExtension(AssetDatabase.asset);
-                //Type classType = Type.GetType(className);
-                //Assembly assembly = classType.Assembly;
-                ParseConfigData(asset.text);
+                Dictionary<int, Dictionary<string, string>> voStringDict = ParseConfigData(asset.text);
+                Dictionary<int, ConfigData> voDataDict = new Dictionary<int, ConfigData>();
+
+                foreach (KeyValuePair<int, Dictionary<string, string>> kvp in voStringDict)
+                {
+                    ConfigData configData = (ConfigData)ReflectionUtility.CreateClassInstance(asset.name);
+                    configData.ParseData(kvp.Value);
+                    voDataDict.Add(kvp.Key, configData);
+                }
+
+                configDataDict.Add(Type.GetType(asset.name), voDataDict);
             }
+        }
+
+        /// <summary>
+        /// Get the configuration data dictionary.
+        /// </summary>
+        /// <typeparam name="T">The class of ConfigData.</typeparam>
+        /// <returns>System.Collections.Generic.Dictionary&lt;System.Int32,QuickUnity.Config.ConfigData&gt;.</returns>
+        public Dictionary<int, ConfigData> GetConfigDataDictionary<T>() where T : ConfigData
+        {
+            Type type = typeof(T);
+            return GetConfigDataDictionary(type);
+        }
+
+        /// <summary>
+        /// Get the configuration data dictionary.
+        /// </summary>
+        /// <param name="type">The type of ConfigData.</param>
+        /// <returns>System.Collections.Generic.Dictionary&lt;System.Int32,QuickUnity.Config.ConfigData&gt;.</returns>
+        public Dictionary<int, ConfigData> GetConfigDataDictionary(Type type)
+        {
+            return configDataDict[type];
+        }
+
+        /// <summary>
+        /// Get the configuration data.
+        /// </summary>
+        /// <typeparam name="T">The class of ConfigData.</typeparam>
+        /// <param name="id">The id of ConfigData.</param>
+        /// <returns>QuickUnity.Config.ConfigData.</returns>
+        public T GetConfigData<T>(int id) where T : ConfigData
+        {
+            Type type = typeof(T);
+            return (T)GetConfigData(type, id);
+        }
+
+        /// <summary>
+        /// Get the configuration data.
+        /// </summary>
+        /// <param name="type">The type of ConfigData.</param>
+        /// <param name="id">The id of ConfigData.</param>
+        /// <returns>QuickUnity.Config.ConfigData.</returns>
+        public ConfigData GetConfigData(Type type, int id)
+        {
+            if (configDataDict.ContainsKey(type))
+            {
+                Dictionary<int, ConfigData> voDataDict = configDataDict[type];
+                return voDataDict[id];
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -72,9 +135,9 @@ namespace QuickUnity.Config
         /// </summary>
         /// <param name="text">The text content of configfuration data.</param>
         /// <returns>Dictionary&lt;System.String, Dictionary&lt;System.String, System.String&gt;&gt;.</returns>
-        private Dictionary<string, Dictionary<string, string>> ParseConfigData(string text)
+        private Dictionary<int, Dictionary<string, string>> ParseConfigData(string text)
         {
-            Dictionary<string, Dictionary<string, string>> dataTable = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<int, Dictionary<string, string>> voStringDict = new Dictionary<int, Dictionary<string, string>>();
 
             string[] textLines = text.Trim().Split("\r\n"[0]);
             string[] names = textLines[1].Split(","[0]);
@@ -85,21 +148,21 @@ namespace QuickUnity.Config
                 string textLine = textLines[i];
                 string[] values = textLine.Split(","[0]);
 
-                Dictionary<string, string> recordset = new Dictionary<string, string>();
+                Dictionary<string, string> recordsets = new Dictionary<string, string>();
 
                 // Loop cols.
                 for (int j = 0, cols = names.Length; j < cols; ++j)
                 {
                     string name = names[j];
                     string value = values[j];
-                    recordset.Add(name, value);
+                    recordsets.Add(name.Trim(), value.Trim());
                 }
 
                 string key = values[0];
-                dataTable.Add(key, recordset);
+                voStringDict.Add(int.Parse(key.Trim()), recordsets);
             }
 
-            return dataTable;
+            return voStringDict;
         }
     }
 }

@@ -1,5 +1,5 @@
-ID,名称,等级,bool值测试,byte值测试,double值测试,float值测试,int值测试
-id,name,level,boolTest,byteTest,doubleTest,floatTest,intTest
-long,string,short,bool,byte,double,float,int
-1,test1,1,TRUE,0,-9999.9,-8888.8,-99
-2,test2,2,FALSE,255,999999.9,88888.8,99
+ID,名称,等级,bool值测试,byte值测试,double值测试,float值测试,long值测试
+id,name,level,boolTest,byteTest,doubleTest,floatTest,longTest
+int,string,short,bool,byte,double,float,long
+1,测试者1,1,TRUE,0,-9999.9,-8888.8,-99
+2,测试者2,2,FALSE,255,999999.9,88888.8,99

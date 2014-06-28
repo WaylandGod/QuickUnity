@@ -11,7 +11,7 @@ public class Example : ConfigData
 	/// <summary>
 	/// ID
 	/// </summary>
-	public long id;
+	public int id;
 
 	/// <summary>
 	/// 名称
@@ -44,9 +44,9 @@ public class Example : ConfigData
 	public float floatTest;
 
 	/// <summary>
-	/// int值测试
+	/// long值测试
 	/// </summary>
-	public int intTest;
+	public long longTest;
 	
     /// <summary>
     /// Parse the data from configuration file.
@@ -54,15 +54,15 @@ public class Example : ConfigData
     /// <param name="kvps">A dictionary to hold key value pair of configuration data.</param>
     public override void ParseData(Dictionary<string, string> kvps)
     {
-        base.ParseData(kvps);	
+        base.ParseData(kvps);
 
-		id = ReadLong("id");
+		id = ReadInt("id");
 		name = ReadString("name");
 		level = ReadShort("level");
 		boolTest = ReadBool("boolTest");
 		byteTest = ReadByte("byteTest");
 		doubleTest = ReadDouble("doubleTest");
 		floatTest = ReadFloat("floatTest");
-		intTest = ReadInt("intTest");
+		longTest = ReadLong("longTest");
     }
 }
