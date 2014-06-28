@@ -1,4 +1,4 @@
 QuickUnity
 ==========
 
-A game framework based on Unity3D C# API
+A game framework for Unity3D.
