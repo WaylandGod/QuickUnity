@@ -154,7 +154,7 @@ namespace QuickUnity.Config
                 for (int j = 0, cols = names.Length; j < cols; ++j)
                 {
                     string name = names[j];
-                    string value = values[j];
+                    string value = (j > values.Length - 1) ? "" : values[j];
                     recordsets.Add(name.Trim(), value.Trim());
                 }
 
