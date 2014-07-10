@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// The Config namespace.
+/// </summary>
 namespace QuickUnity.Config
 {
     /// <summary>

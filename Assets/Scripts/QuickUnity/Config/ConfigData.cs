@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The Config namespace.
+/// </summary>
 namespace QuickUnity.Config
 {
     /// <summary>

@@ -6,6 +6,9 @@ using System.Threading;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// The Config namespace.
+/// </summary>
 namespace QuickUnityEditor.Config
 {
     /// <summary>

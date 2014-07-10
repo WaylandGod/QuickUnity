@@ -2,6 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// The Assets namespace.
+/// </summary>
 namespace QuickUnityEditor.Assets
 {
     /// <summary>
