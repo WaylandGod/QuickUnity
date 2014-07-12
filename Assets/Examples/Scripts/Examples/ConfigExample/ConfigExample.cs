@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Example to show how to use ConfigManager.
+/// </summary>
+[AddComponentMenu("")]
 public class ConfigExample : MonoBehaviour
 {
     /// <summary>

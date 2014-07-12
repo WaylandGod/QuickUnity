@@ -9,7 +9,7 @@ namespace QuickUnity.Component
     /// <summary>
     /// The FPS counter tool.
     /// </summary>
-    [AddComponentMenu("QuickUnity/FPS Counter")]
+    [AddComponentMenu("QuickUnity/Tools/FPS Counter")]
     [RequireComponent(typeof(GUIText))]
     public class FPSCounter : MonoBehaviour
     {
@@ -21,6 +21,7 @@ namespace QuickUnity.Component
         // Use this for initialization
         private void Start()
         {
+            Application.targetFrameRate = 60;
             DisplayFPS(60);
             StartCoroutine(CalculateFPS());
         }

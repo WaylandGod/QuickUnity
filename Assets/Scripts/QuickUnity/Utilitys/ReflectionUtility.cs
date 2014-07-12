@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
-using UnityEngine;
 
 /// <summary>
 /// The Utilitys namespace.
