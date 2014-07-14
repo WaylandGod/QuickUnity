@@ -49,9 +49,9 @@ public class Example : ConfigData
 	public long longTest;
 	
     /// <summary>
-    /// Parse the data from configuration file.
+    /// Parse the waterHeightData from configuration file.
     /// </summary>
-    /// <param name="kvps">A dictionary to hold key value pair of configuration data.</param>
+    /// <param name="kvps">A dictionary to hold key value pair of configuration waterHeightData.</param>
     public override void ParseData(Dictionary<string, string> kvps)
     {
         base.ParseData(kvps);

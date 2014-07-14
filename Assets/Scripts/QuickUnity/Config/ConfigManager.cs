@@ -11,7 +11,7 @@ using UnityEngine;
 namespace QuickUnity.Config
 {
     /// <summary>
-    /// A class to mange everything about config data.
+    /// A class to mange everything about config waterHeightData.
     /// </summary>
     public sealed class ConfigManager
     {
@@ -47,7 +47,7 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// The configuration data table.
+        /// The configuration waterHeightData table.
         /// </summary>
         private Dictionary<Type, Dictionary<int, ConfigData>> configDataDict;
 
@@ -84,7 +84,7 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// Get the configuration data dictionary.
+        /// Get the configuration waterHeightData dictionary.
         /// </summary>
         /// <typeparam name="T">The class of ConfigData.</typeparam>
         /// <returns>System.Collections.Generic.Dictionary&lt;System.Int32,QuickUnity.Config.ConfigData&gt;.</returns>
@@ -95,7 +95,7 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// Get the configuration data dictionary.
+        /// Get the configuration waterHeightData dictionary.
         /// </summary>
         /// <param name="type">The type of ConfigData.</param>
         /// <returns>System.Collections.Generic.Dictionary&lt;System.Int32,QuickUnity.Config.ConfigData&gt;.</returns>
@@ -105,7 +105,7 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// Get the configuration data.
+        /// Get the configuration waterHeightData.
         /// </summary>
         /// <typeparam name="T">The class of ConfigData.</typeparam>
         /// <param name="id">The id of ConfigData.</param>
@@ -117,7 +117,7 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// Get the configuration data.
+        /// Get the configuration waterHeightData.
         /// </summary>
         /// <param name="type">The type of ConfigData.</param>
         /// <param name="id">The id of ConfigData.</param>
@@ -134,9 +134,9 @@ namespace QuickUnity.Config
         }
 
         /// <summary>
-        /// Parses the configuration data.
+        /// Parses the configuration waterHeightData.
         /// </summary>
-        /// <param name="text">The text content of configfuration data.</param>
+        /// <param name="text">The text content of configfuration waterHeightData.</param>
         /// <returns>Dictionary&lt;System.String, Dictionary&lt;System.String, System.String&gt;&gt;.</returns>
         private Dictionary<int, Dictionary<string, string>> ParseConfigData(string text)
         {

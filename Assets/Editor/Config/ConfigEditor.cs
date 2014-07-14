@@ -19,7 +19,7 @@ namespace QuickUnityEditor.Config
         /// <summary>
         /// The warning message about no config file.
         /// </summary>
-        private const string WARNING_NO_CONFIG_FILE = "No config data files can be found !";
+        private const string WARNING_NO_CONFIG_FILE = "No config waterHeightData files can be found !";
 
         /// <summary>
         /// The warning message about no config content can be found in file.
@@ -72,7 +72,7 @@ namespace QuickUnityEditor.Config
                 filePaths[i] = AssetDatabase.GUIDToAssetPath(guid);
             }
 
-            // Save all config data files.
+            // Save all config waterHeightData files.
             ArrayList assets = new ArrayList();
 
             foreach (string filePath in filePaths)
@@ -143,7 +143,7 @@ namespace QuickUnityEditor.Config
             // The fields defination of ConfigData.
             string fieldsStr = "";
 
-            // Call methods of reading data.
+            // Call methods of reading waterHeightData.
             string methodsStr = "";
 
             string[] comments = configLines[0].Split(","[0]);
@@ -169,7 +169,7 @@ namespace QuickUnityEditor.Config
         }
 
         /// <summary>
-        /// Gets the configuration data field.
+        /// Gets the configuration waterHeightData field.
         /// </summary>
         /// <param name="comment">The comment of field.</param>
         /// <param name="name">The name of field.</param>
@@ -188,7 +188,7 @@ namespace QuickUnityEditor.Config
         }
 
         /// <summary>
-        /// Gets the methods of reading configuration data.
+        /// Gets the methods of reading configuration waterHeightData.
         /// </summary>
         /// <param name="name">The name of field.</param>
         /// <param name="type">The type of field.</param>

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace QuickUnity.Config
 {
     /// <summary>
-    /// Config data base class.
+    /// Config waterHeightData base class.
     /// </summary>
     public class ConfigData
     {
@@ -18,14 +18,14 @@ namespace QuickUnity.Config
         private const string ERROR_KEY_NOT_FOUND = " can not be found !";
 
         /// <summary>
-        /// A dictionary to hold key value pair of config data.
+        /// A dictionary to hold key value pair of config waterHeightData.
         /// </summary>
         private Dictionary<string, string> kvps;
 
         /// <summary>
-        /// Parse the data from config file.
+        /// Parse the waterHeightData from config file.
         /// </summary>
-        /// <param name="kvps">A dictionary to hold key value pair of config data.</param>
+        /// <param name="kvps">A dictionary to hold key value pair of config waterHeightData.</param>
         public virtual void ParseData(Dictionary<string, string> kvps)
         {
             this.kvps = kvps;
