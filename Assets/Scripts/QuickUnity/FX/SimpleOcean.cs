@@ -21,6 +21,16 @@ namespace QuickUnity.FX
         private const float GRAVITY_ACCELERATION = 9.81f;
 
         /// <summary>
+        /// The humidity of force storm.
+        /// </summary>
+        private const float FORCE_STORM_HUMIDITY = 1.0f;
+
+        /// <summary>
+        /// The humidit update frequency.
+        /// </summary>
+        private const float HUMIDITY_UPDATE_FREQUENCY = 1.0f / 280.0f;
+
+        /// <summary>
         /// The render layers.
         /// </summary>
         public LayerMask renderLayers = -1;
@@ -76,6 +86,16 @@ namespace QuickUnity.FX
         public float choppyScale = 2.0f;
 
         /// <summary>
+        /// The light direction.
+        /// </summary>
+        public Vector4 lightDirection = new Vector4(1.0f, -8.02f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// The force storm.
+        /// </summary>
+        public bool forceStorm = false;
+
+        /// <summary>
         /// The ocean tile size.
         /// </summary>
         public Vector3 oceanTileSize;
@@ -93,6 +113,7 @@ namespace QuickUnity.FX
         /// <summary>
         /// The surface color of ocean.
         /// </summary>
+        [SerializeField]
         private Color surfaceColor = Color.white;
 
         /// <summary>
@@ -115,6 +136,7 @@ namespace QuickUnity.FX
         /// <summary>
         /// The water color of ocean.
         /// </summary>
+        [SerializeField]
         private Color waterColor = Color.blue;
 
         /// <summary>
@@ -177,11 +199,6 @@ namespace QuickUnity.FX
                 }
             }
         }
-
-        /// <summary>
-        /// The shader of simple ocean.
-        /// </summary>
-        private Shader oceanShader;
 
         /// <summary>
         /// The reciprocal of ocean tile size.
@@ -283,14 +300,35 @@ namespace QuickUnity.FX
         private Transform mainCameraTransform;
 
         /// <summary>
+        /// The humidity parameter.
+        /// </summary>
+        private float humidity = 0.1f;
+
+        /// <summary>
+        /// The previous humidity value.
+        /// </summary>
+        private float prevHumidityValue = 0.1f;
+
+        /// <summary>
+        /// The next humidity value.
+        /// </summary>
+        private float nextHumidityValue = 0.4f;
+
+        /// <summary>
+        /// The previous humidity update time.
+        /// </summary>
+        private float prevHumidityUpdateTime;
+
+        /// <summary>
+        /// The wave scale in real time.
+        /// </summary>
+        private float waveScaleRealTime;
+
+        /// <summary>
         /// Use this for initialization.
         /// </summary>
         private void Start()
         {
-            // Get the shader from material.
-            if (oceanShader != null)
-                oceanShader = oceanMaterial.shader;
-
             // Initialize oceanTileSizeReciprocal when script start.
             oceanTileSizeReciprocal = VectorUtility.GetVector2Reciprocal(oceanTileSize);
 
@@ -343,6 +381,9 @@ namespace QuickUnity.FX
 
             if (Camera.main != null)
                 mainCameraTransform = Camera.main.transform;
+
+            //Update Wave
+            StartCoroutine(UpdateWave());
         }
 
         /// <summary>
@@ -359,9 +400,9 @@ namespace QuickUnity.FX
         /// </summary>
         private void Update()
         {
-            // Calculate
-            float halfHeight = tilePolygonHeight / 2.0f;
+            // Calculate mesh vertices, uv and tangents.
             float halfWidth = tilePolygonWidth / 2.0f;
+            float halfHeight = tilePolygonHeight / 2.0f;
             float time = Time.time;
 
             for (int y = 0; y < tilePolygonHeight; ++y)
@@ -406,7 +447,7 @@ namespace QuickUnity.FX
 
             int area = tilePolygonWidth * tilePolygonHeight;
             float scaleX = choppyScale / area;
-            float scaleY = waveScale / area;
+            float scaleY = waveScaleRealTime / area;
             float scaleYReciprocal = MathUtility.GetReciprocal(scaleY);
 
             for (int i = 0; i < area; ++i)
@@ -448,12 +489,14 @@ namespace QuickUnity.FX
 
             for (int i = 0; i < geometryArea; ++i)
             {
-                if ((i + 1) % geometryWidth == 0)
-                    tangents[i] = Vector3.Normalize(vertices[i - tilePolygonWidth + 1] + new Vector3(oceanTileSize.x, 0.0f, 0.0f) - vertices[i]);
-                else
-                    tangents[i] = Vector3.Normalize(vertices[i + 1] - vertices[i]);
+                Vector3 tmp;
 
-                tangents[i].w = 1.0f;
+                if ((i + 1) % geometryWidth == 0)
+                    tmp = Vector3.Normalize(vertices[i - tilePolygonWidth + 1] + new Vector3(oceanTileSize.x, 0.0f, 0.0f) - vertices[i]);
+                else
+                    tmp = Vector3.Normalize(vertices[i + 1] - vertices[i]);
+
+                tangents[i] = new Vector4(tmp.x, tmp.y, tmp.z, tangents[i].w);
             }
 
             for (int y = 0; y < geometryHeight; ++y)
@@ -552,6 +595,9 @@ namespace QuickUnity.FX
         /// </summary>
         private void SetupOffscreenRendering()
         {
+            if (oceanMaterial != null)
+                oceanMaterial.SetVector("_LightDir", lightDirection);
+
             // if renderer reflection and refraction textures.
             CreateRenderTextures();
 
@@ -722,6 +768,25 @@ namespace QuickUnity.FX
         }
 
         /// <summary>
+        /// Updates the wave.
+        /// </summary>
+        /// <returns>IEnumerator.</returns>
+        private IEnumerator UpdateWave()
+        {
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
+
+                if (forceStorm)
+                    humidity = FORCE_STORM_HUMIDITY;
+                else
+                    humidity = GetHumidity();
+
+                waveScaleRealTime = Mathf.Lerp(0.0f, waveScale, humidity);
+            }
+        }
+
+        /// <summary>
         /// Updates the color of the water.
         /// </summary>
         private void UpdateWaterColor()
@@ -860,6 +925,29 @@ namespace QuickUnity.FX
 
             float vecKMagnitude = vecK.magnitude;
             return (float)(A * Math.Exp(-1.0f / (k2 * L * L) - Math.Pow(vecKMagnitude * 0.1, 2.0f)) / (k2 * k2) * Math.Pow(Vector2.Dot(vecK / vecKMagnitude, wind / wind.magnitude), 2.0f));
+        }
+
+        /// <summary>
+        /// This function return smooth random value from 0 to 1, used for smooth waves scale calculation ®"MindBlocks".
+        /// </summary>
+        /// <returns>System.Single.</returns>
+        private float GetHumidity()
+        {
+            float time = Time.time;
+
+            int intTime = (int)(time * HUMIDITY_UPDATE_FREQUENCY);
+            int intPrevTime = (int)(prevHumidityUpdateTime * HUMIDITY_UPDATE_FREQUENCY);
+
+            if (intTime != intPrevTime)
+            {
+                prevHumidityValue = nextHumidityValue;
+                nextHumidityValue = UnityEngine.Random.value;
+            }
+
+            prevHumidityValue = time;
+            float t = time * HUMIDITY_UPDATE_FREQUENCY - intTime;
+
+            return Mathf.SmoothStep(prevHumidityValue, nextHumidityValue, t);
         }
 
         /// <summary>
