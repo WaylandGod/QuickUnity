@@ -31,6 +31,11 @@ namespace QuickUnity.FX
         private const float HUMIDITY_UPDATE_FREQUENCY = 1.0f / 280.0f;
 
         /// <summary>
+        /// The maximum LOD.
+        /// </summary>
+        private const int MAX_LOD = 4;
+
+        /// <summary>
         /// The render layers.
         /// </summary>
         public LayerMask renderLayers = -1;
@@ -294,15 +299,6 @@ namespace QuickUnity.FX
         private List<List<Mesh>> tilesLOD;
 
         /// <summary>
-        /// Gets the maximum LOD of tiles.
-        /// </summary>
-        /// <value>The maximum LOD.</value>
-        private int MaxLOD
-        {
-            get { return tilesCount * tilesCount; }
-        }
-
-        /// <summary>
         /// The offscreen camera for rendering reflection and refraction.
         /// </summary>
         private Camera offscreenCamera;
@@ -360,7 +356,7 @@ namespace QuickUnity.FX
             // Initialize tiles LOD list.
             tilesLOD = new List<List<Mesh>>();
 
-            for (int i = 0, count = MaxLOD; i < count; ++i)
+            for (int i = 0, count = MAX_LOD; i < count; ++i)
             {
                 tilesLOD.Add(new List<Mesh>());
             }
@@ -551,7 +547,7 @@ namespace QuickUnity.FX
 
             tangents[geometryArea] = Vector4.Normalize(vertices[geometryArea] + new Vector3(oceanTileSize.x, 0.0f, 0.0f) - vertices[1]);
 
-            for (int level = 0; level < MaxLOD; ++level)
+            for (int level = 0; level < MAX_LOD; ++level)
             {
                 int pow = (int)Math.Pow(2.0f, level);
                 int length = (int)((tilePolygonHeight / pow + 1) * (tilePolygonWidth / pow + 1));
@@ -865,20 +861,20 @@ namespace QuickUnity.FX
 
             int i = 0;
             int j = 0;
-            int count = MaxLOD;
+            int count = MAX_LOD;
 
             for (i = 0; i < count; ++i)
             {
-                int length = (int)(tilePolygonHeight / Math.Pow(2, i) + 1) * (int)(tilePolygonWidth / Math.Pow(2, i) + 1);
+                int idx = 0;
+                double pow = Math.Pow(2, i);
+
+                int length = (int)(tilePolygonHeight / pow + 1) * (int)(tilePolygonWidth / pow + 1);
                 Vector3[] verticesLOD = new Vector3[length];
                 Vector2[] uvLOD = new Vector2[length];
 
-                int idx = 0;
-                int pow = (int)Math.Pow(2, i);
-
-                for (y = 0; y < geometryHeight; y += pow)
+                for (y = 0; y < geometryHeight; y += (int)pow)
                 {
-                    for (x = 0; x < geometryWidth; x += pow)
+                    for (x = 0; x < geometryWidth; x += (int)pow)
                     {
                         verticesLOD[idx] = vertices[geometryWidth * y + x];
                         uvLOD[idx++] = uv[geometryWidth * y + x];
@@ -899,11 +895,12 @@ namespace QuickUnity.FX
             for (i = 0; i < count; ++i)
             {
                 int idx = 0;
-                int widthLOD = (int)(tilePolygonWidth / Math.Pow(2, i) + 1);
-                int[] triangles = new int[(int)(tilePolygonHeight / Math.Pow(2, i) * tilePolygonWidth / Math.Pow(2, i)) * 6];
+                double pow = Math.Pow(2, i);
+                int widthLOD = (int)(tilePolygonWidth / pow + 1);
+                int[] triangles = new int[(int)(tilePolygonHeight / pow * tilePolygonWidth / pow) * 6];
 
-                int height = (int)(tilePolygonHeight / Math.Pow(2, i));
-                int width = (int)(tilePolygonWidth / Math.Pow(2, i));
+                int height = (int)(tilePolygonHeight / pow);
+                int width = (int)(tilePolygonWidth / pow);
 
                 for (y = 0; y < height; ++y)
                 {
