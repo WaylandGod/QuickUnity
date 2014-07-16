@@ -207,7 +207,7 @@ namespace QuickUnityEditor.FX
 
                 // Light Direction.
                 EditorGUILayout.LabelField("Light Direction");
-                ocean.lightDirection = EditorGUILayout.Vector3Field("", ocean.lightDirection);
+                ocean.LightDirection = EditorGUILayout.Vector3Field("", ocean.LightDirection);
                 EditorGUILayout.Separator();
 
                 // Reflection Enabled.

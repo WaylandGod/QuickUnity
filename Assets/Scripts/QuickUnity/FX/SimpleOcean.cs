@@ -88,7 +88,25 @@ namespace QuickUnity.FX
         /// <summary>
         /// The light direction.
         /// </summary>
-        public Vector4 lightDirection = new Vector4(1.0f, -8.02f, 0.0f, 0.0f);
+        [SerializeField]
+        private Vector4 lightDirection;
+
+        /// <summary>
+        /// Gets or sets the light direction.
+        /// </summary>
+        /// <value>The light direction.</value>
+        public Vector4 LightDirection
+        {
+            get { return lightDirection; }
+            set
+            {
+                if (lightDirection != value)
+                {
+                    lightDirection = value;
+                    UpdateLightDirection();
+                }
+            }
+        }
 
         /// <summary>
         /// The force storm.
@@ -355,9 +373,9 @@ namespace QuickUnity.FX
                     GameObject tile = new GameObject("Ocean Tile");
 
                     tile.transform.position = new Vector3(
-                        (x - Mathf.Floor(tilesCount * 0.5f)) * oceanTileSize.x,
+                        transform.position.x + (x - Mathf.Floor(tilesCount * 0.5f)) * oceanTileSize.x,
                         transform.position.y,
-                        (y - Mathf.Floor(tilesCount * 0.5f)) * oceanTileSize.z
+                        transform.position.z + (y - Mathf.Floor(tilesCount * 0.5f)) * oceanTileSize.z
                         );
 
                     MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
@@ -793,6 +811,14 @@ namespace QuickUnity.FX
         {
             oceanMaterial.SetColor("_SurfaceColor", surfaceColor);
             oceanMaterial.SetColor("_WaterColor", waterColor);
+        }
+
+        /// <summary>
+        /// Updates the light direction.
+        /// </summary>
+        private void UpdateLightDirection()
+        {
+            oceanMaterial.SetVector("_LightDir", lightDirection);
         }
 
         /// <summary>
