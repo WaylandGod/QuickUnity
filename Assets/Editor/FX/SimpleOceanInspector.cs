@@ -26,27 +26,27 @@ namespace QuickUnityEditor.FX
         /// <summary>
         /// The texture settings foldout.
         /// </summary>
-        private bool textureSettingsExpand;
+        private bool textureSettingsExpand = EditorPrefs.GetBool("textureSettingsExpand");
 
         /// <summary>
         /// The color settings foldout.
         /// </summary>
-        private bool colorSettingsExpand;
+        private bool colorSettingsExpand = EditorPrefs.GetBool("colorSettingsExpand");
 
         /// <summary>
         /// The size settings foldout.
         /// </summary>
-        private bool sizeSettingsExpand;
+        private bool sizeSettingsExpand = EditorPrefs.GetBool("sizeSettingsExpand");
 
         /// <summary>
         /// The wave settings foldout.
         /// </summary>
-        private bool waveSettingsExpand;
+        private bool waveSettingsExpand = EditorPrefs.GetBool("waveSettingsExpand");
 
         /// <summary>
         /// The other settings foldout.
         /// </summary>
-        private bool otherSettingsExpand;
+        private bool otherSettingsExpand = EditorPrefs.GetBool("otherSettingsExpand");
 
         /// <summary>
         /// Called when [inspector GUI].
@@ -63,6 +63,7 @@ namespace QuickUnityEditor.FX
 
             // Texture Settings.
             textureSettingsExpand = EditorGUILayout.Foldout(textureSettingsExpand, "Texture Settings");
+            EditorPrefs.SetBool("textureSettingsExpand", textureSettingsExpand);
 
             if (textureSettingsExpand)
             {
@@ -97,6 +98,7 @@ namespace QuickUnityEditor.FX
 
             // Color Settings.
             colorSettingsExpand = EditorGUILayout.Foldout(colorSettingsExpand, "Color Settings");
+            EditorPrefs.SetBool("colorSettingsExpand", colorSettingsExpand);
 
             if (colorSettingsExpand)
             {
@@ -123,6 +125,7 @@ namespace QuickUnityEditor.FX
 
             // Size Settings.
             sizeSettingsExpand = EditorGUILayout.Foldout(sizeSettingsExpand, "Size Settings");
+            EditorPrefs.SetBool("sizeSettingsExpand", sizeSettingsExpand);
 
             if (sizeSettingsExpand)
             {
@@ -152,6 +155,7 @@ namespace QuickUnityEditor.FX
 
             // Wave Settings.
             waveSettingsExpand = EditorGUILayout.Foldout(waveSettingsExpand, "Wave Settings");
+            EditorPrefs.SetBool("waveSettingsExpand", waveSettingsExpand);
 
             if (waveSettingsExpand)
             {
@@ -180,6 +184,7 @@ namespace QuickUnityEditor.FX
 
             // Other Settings.
             otherSettingsExpand = EditorGUILayout.Foldout(otherSettingsExpand, "Other Settings");
+            EditorPrefs.SetBool("otherSettingsExpand", otherSettingsExpand);
 
             if (otherSettingsExpand)
             {

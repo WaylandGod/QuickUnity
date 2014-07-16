@@ -93,7 +93,7 @@ namespace QuickUnity.FX
         /// <summary>
         /// The force storm.
         /// </summary>
-        public bool forceStorm = false;
+        public bool forceStorm;
 
         /// <summary>
         /// The ocean tile size.
