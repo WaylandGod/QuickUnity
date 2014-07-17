@@ -33,7 +33,12 @@ namespace QuickUnity.FX
         /// <summary>
         /// The maximum LOD.
         /// </summary>
-        private const int MAX_LOD = 4;
+        private const int MAX_LOD = 1;
+
+        /// <summary>
+        /// Set true simulate ocean when it can be seen, otherwise set false.
+        /// </summary>
+        public bool visibleSimulation;
 
         /// <summary>
         /// The render layers.
@@ -224,6 +229,11 @@ namespace QuickUnity.FX
         }
 
         /// <summary>
+        /// The ocean simulation enabled.
+        /// </summary>
+        private bool simulationEnabled;
+
+        /// <summary>
         /// The reciprocal of ocean tile size.
         /// </summary>
         private Vector2 oceanTileSizeReciprocal;
@@ -375,6 +385,11 @@ namespace QuickUnity.FX
                         );
 
                     MeshFilter meshFilter = tile.AddComponent<MeshFilter>();
+                    Mesh mesh = meshFilter.mesh;
+
+                    mesh.vertices = new Vector3[3] { Vector3.zero, Vector3.zero, Vector3.zero };
+                    mesh.normals = mesh.vertices;
+
                     tile.AddComponent<MeshRenderer>();
                     tile.renderer.material = oceanMaterial;
                     tile.transform.parent = transform;
@@ -396,12 +411,17 @@ namespace QuickUnity.FX
             if (Camera.main != null)
                 mainCameraTransform = Camera.main.transform;
 
+            if (visibleSimulation)
+                simulationEnabled = false;
+            else
+                simulationEnabled = true;
+
             //Update Wave
             StartCoroutine(UpdateWave());
         }
 
         /// <summary>
-        /// Called when activeSlef is false.
+        /// Called when the behaviour becomes disabled () or inactive.
         /// </summary>
         private void OnDisable()
         {
@@ -410,10 +430,31 @@ namespace QuickUnity.FX
         }
 
         /// <summary>
+        /// Called when the renderer is no longer visible by any camera.
+        /// </summary>
+        private void OnBecameVisible()
+        {
+            if (visibleSimulation)
+                simulationEnabled = true;
+        }
+
+        /// <summary>
+        /// Called when the renderer became visible by any camera.
+        /// </summary>
+        private void OnBecameInvisible()
+        {
+            if (visibleSimulation)
+                simulationEnabled = false;
+        }
+
+        /// <summary>
         /// Update is called once per frame.
         /// </summary>
         private void Update()
         {
+            if (!simulationEnabled)
+                return;
+
             // Calculate mesh vertices, uv and tangents.
             float halfWidth = tilePolygonWidth / 2.0f;
             float halfHeight = tilePolygonHeight / 2.0f;
@@ -888,6 +929,7 @@ namespace QuickUnity.FX
                     Mesh meshLOD = tilesLOD[i][j];
                     meshLOD.vertices = verticesLOD;
                     meshLOD.uv = uvLOD;
+                    meshLOD.tangents = tangents;
                 }
             }
 

@@ -190,6 +190,14 @@ namespace QuickUnityEditor.FX
             {
                 EditorGUILayout.BeginVertical();
 
+                // Visible Simulation
+                ocean.visibleSimulation = EditorGUILayout.ToggleLeft(" Visible Simulation", ocean.visibleSimulation);
+                EditorGUILayout.Separator();
+
+                // Reflection Enabled.
+                ocean.reflectionEnabled = EditorGUILayout.ToggleLeft(" Reflection Enabled", ocean.reflectionEnabled);
+                EditorGUILayout.Separator();
+
                 // Ocean Material.
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Ocean Material");
@@ -208,10 +216,6 @@ namespace QuickUnityEditor.FX
                 // Light Direction.
                 EditorGUILayout.LabelField("Light Direction");
                 ocean.LightDirection = EditorGUILayout.Vector3Field("", ocean.LightDirection);
-                EditorGUILayout.Separator();
-
-                // Reflection Enabled.
-                ocean.reflectionEnabled = EditorGUILayout.ToggleLeft(" Reflection Enabled", ocean.reflectionEnabled);
                 EditorGUILayout.Separator();
 
                 EditorGUILayout.EndVertical();
