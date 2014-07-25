@@ -1,4 +1,4 @@
-﻿Shader "Mobile/QuickUnity/SimpleOcean" {
+﻿Shader "Mobile/QuickUnity/Simple Ocean" {
 	Properties {
 		_SurfaceColor ("Surface Color", Color) = (1.0, 1.0, 1.0, 1.0)
 		_WaterColor ("Water Color", Color) = (1.0, 1.0, 1.0, 1.0)
@@ -8,6 +8,7 @@
 		_Foam ("Foam (RGB)", 2D) = "white" {}
 		_MaterialSize ("Material Size", Vector) = (1.0, 1.0, 1.0, 1.0)
 		_LightDir ("Light Direction", Vector) = (0.3, -0.6, -1.0, 0.0)
+		_LightIntensity ("Light Intensity", float) = 100.0
 	}
 	SubShader {
 		Pass {
@@ -62,6 +63,7 @@
 			sampler2D _Foam;
 			half4 _SurfaceColor;
 			half4 _WaterColor;
+			float _LightIntensity;
 
 			half4 frag(v2f i) : COLOR {
 				half4 o = half4(0.0, 0.0, 0.0, 1.0);
@@ -90,7 +92,7 @@
 
 				half4 foam = clamp(tex2D(_Foam, i.bumpTexCoord.xy * 1.0) - 0.5, 0.0, 1.0) * foamStrength;
 				float3 halfVec = normalize(normalViewDir - normalize(i.lightDir));
-				float specular = pow(max(dot(halfVec, tangentNormal.xyz), 0.0), 250.0);
+				float specular = pow(max(dot(halfVec, tangentNormal.xyz), 0.0), _LightIntensity);
 
 				o.rgb = lerp(refraction, reflection, fresnelTerm) + clamp(foam.r, 0.0, 1.0) + specular;
 				o.a = 1.0;
